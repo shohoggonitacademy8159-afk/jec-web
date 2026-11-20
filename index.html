@@ -238,7 +238,7 @@ async function init(){
   try{DB.doc("cfg/main").onSnapshot(function(s){SH.cfg=s.data()||{}},function(){})}catch(e){}}
 
  if(!DB&&window.SNAP){for(var k in SNAP)SH[k]=SNAP[k];if(!ls("ec_user")&&!window.FBCFG0){}
-var APP_VER=window.APP_VER=16;
+var APP_VER=window.APP_VER=17;
 try{fetch("https://raw.githubusercontent.com/shohoggonitacademy8159-afk/jec-data/main/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!(+j.v>APP_VER)||!j.url)return;if(ls("ec_updskip")==j.v)return;var d=document.createElement("div");d.style.cssText="position:fixed;left:10px;right:10px;bottom:70px;z-index:99999;background:#1565d8;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:15px";d.innerHTML='<b>নতুন আপডেট এসেছে!</b><br><span style="font-size:13px">'+(j.note||"অ্যাপের নতুন সংস্করণ ডাউনলোড করুন।")+'</span><div style="margin-top:8px;display:flex;gap:8px"><a href="'+j.url+'" target="_blank" style="background:#fff;color:#1565d8;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none">আপডেট করুন</a><button id="updx" style="background:transparent;color:#fff;border:1px solid #fff;border-radius:10px;padding:8px 14px">পরে</button></div>';document.body.appendChild(d);document.getElementById("updx").onclick=function(){ls("ec_updskip",j.v);d.remove()}}).catch(function(){})}catch(e){}
 window.GENR=function(R){try{
 var cats=CT.map(function(c){return c[0]}),t0=new Date(Date.now()+216e5),mn=chaps("math").map(function(c){return c[0]}),bl=chaps("bl").map(function(c){return c[0]}),g1=chaps("gkbd").map(function(c){return c[0]}),g2=chaps("gkint").map(function(c){return c[0]}),en=chaps("eng").map(function(c){return c[0]});
@@ -2115,11 +2115,30 @@ function rnSy(l){return(l||[]).map(function(t){return t&&t.ch==CH_OLD?{s:t.s,ch:
 /* nb64: admin management — guide, stats, DB question manager (search/edit/hide/delete) */
 (function(){
 var NF=function(n){return bn(n)};
+window.QE={
+ form:function(p,q,sub){var o=q[1]||[],n=Math.max(o.length,4);if(n<5)n=Math.min(5,n+1);
+  var h="";for(var i=0;i<n;i++)h+='<label>অপশন '+bn(i+1)+(i>=o.length&&i>=4?" (ঐচ্ছিক)":"")+'</label><input id="'+p+'_o'+i+'" value="'+esc(o[i]||"")+'">';
+  h+='<label>সঠিক উত্তর</label><select id="'+p+'_a">'+[0,1,2,3,4].slice(0,n).map(function(i){return'<option value="'+i+'"'+(i==q[2]?" selected":"")+'>অপশন '+bn(i+1)+'</option>'}).join("")+'</select>';
+  h+='<label>ব্যাখ্যা</label><textarea id="'+p+'_e" rows="3">'+esc(q[3]||"")+'</textarea>';
+  if(sub)h+='<label>বিষয় (সাবজেক্ট ট্যাগ)</label><input id="'+p+'_sj" value="'+esc(q[5]||"")+'"><label>টপিক</label><input id="'+p+'_tp" value="'+esc(q[6]||"")+'">';
+  return h},
+ read:function(p,q,sub){var o=[],map={},n=0;for(var i=0;i<5;i++){var e=document.getElementById(p+"_o"+i);if(!e)continue;var t=e.value.trim();if(t){map[i]=o.length;o.push(t)}}
+  var a=+document.getElementById(p+"_a").value;
+  if(o.length<2){alert("কমপক্ষে দুটি অপশন লিখুন।");return null}
+  if(new Set(o).size<o.length){alert("অপশনগুলো আলাদা হতে হবে।");return null}
+  if(!(a in map)){alert("সঠিক উত্তর হিসেবে একটি খালি অপশন বেছেছেন।");return null}
+  var r={o:o,a:map[a],e:document.getElementById(p+"_e").value};
+  if(sub){r.sj=document.getElementById(p+"_sj").value.trim();r.tp=document.getElementById(p+"_tp").value.trim()}
+  return r},
+ apply:function(old,r,qt,sub){var nq=old.slice();nq[0]=qt;nq[1]=r.o;nq[2]=r.a;nq[3]=r.e;
+  if(sub){while(nq.length<5)nq.push("");if(r.sj||nq[5]!==undefined)nq[5]=r.sj;if(r.tp||nq[6]!==undefined)nq[6]=r.tp}
+  return nq}
+};
 function mqList(){var s=S.mqs||"",c=S.mqc||"",t=(S.mqt||"").toLowerCase(),r=[];
  SH.questions.forEach(function(x){if(!x||!x.q)return;if(s&&x.s!=s)return;if(c&&x.ch!=c)return;if(t&&String(x.q[0]).toLowerCase().indexOf(t)<0)return;r.push(x)});return r}
 function mqChs(){var s=S.mqs||"",m={};SH.questions.forEach(function(x){if((!s||x.s==s)&&x.ch)m[x.ch]=(m[x.ch]||0)+1});return Object.keys(m).sort().map(function(k){return[k,m[k]]})}
 function mqItem(x){var ed=S.mqe==x.id,L="কখ";
- if(ed){var o=x.q[1]||[];return'<div class="card" style="margin:8px 0"><label>প্রশ্ন</label><textarea id="mq_q" rows="3">'+esc(x.q[0])+'</textarea>'+[0,1,2,3].map(function(i){return'<label>অপশন '+bn(i+1)+'</label><input id="mq_o'+i+'" value="'+esc(o[i]||"")+'">'}).join("")+'<label>সঠিক উত্তর</label><select id="mq_a">'+[0,1,2,3].map(function(i){return'<option value="'+i+'"'+(i==x.q[2]?" selected":"")+'>অপশন '+bn(i+1)+'</option>'}).join("")+'</select><label>ব্যাখ্যা</label><textarea id="mq_e" rows="2">'+esc(x.q[3]||"")+'</textarea><label>সোর্স (ঐচ্ছিক, যেমন বইয়ের নাম/পৃষ্ঠা)</label><input id="mq_s" value="'+esc(x.src||"")+'"><div class="row" style="margin-top:8px"><button class="primary" data-a="mqsv" data-id="'+x.id+'">সেভ</button><button data-a="mqcx">বাতিল</button></div></div>'}
+ if(ed){var o=x.q[1]||[];return'<div class="card" style="margin:8px 0"><label>প্রশ্ন</label><textarea id="mq_q" rows="3">'+esc(x.q[0])+'</textarea>'+QE.form('mq',x.q,0)+'<label>সোর্স (ঐচ্ছিক, যেমন বইয়ের নাম/পৃষ্ঠা)</label><input id="mq_s" value="'+esc(x.src||"")+'"><div class="row" style="margin-top:8px"><button class="primary" data-a="mqsv" data-id="'+x.id+'">সেভ</button><button data-a="mqcx">বাতিল</button></div></div>'}
  var o=(x.q[1]||[]).map(function(t,i){return(i==x.q[2]?"✅ ":"▫️ ")+esc(t)}).join(" · ");
  return'<div class="card" style="margin:8px 0;'+(x.hide?"opacity:.55":"")+'"><b>'+esc(x.q[0])+'</b><br><small style="color:var(--mute)">'+o+'</small><br><small style="color:var(--mute)">'+esc((F[x.s]||{}).n||x.s)+' · '+esc(x.ch)+(x.hide?" · 🚫 লুকানো":"")+'</small><div class="row" style="margin-top:6px"><button class="link" data-a="mqed" data-id="'+x.id+'">সম্পাদনা</button><button class="link" data-a="mqhd" data-id="'+x.id+'">'+(x.hide?"দেখান":"লুকান")+'</button><button class="link" data-a="mqdl" data-id="'+x.id+'">মুছুন</button></div></div>'}
 function mqRender(){var h=$("mqx");if(!h)return;var r=mqList(),pg=S.mqp||0,N=15,sl=r.slice(pg*N,pg*N+N);
@@ -2152,9 +2171,8 @@ ACT.mqgo=function(){mqRender()};
 ACT.mqpg=function(d){S.mqp=Math.max(0,(S.mqp||0)+(+d.d));mqRender()};
 ACT.mqed=function(d){S.mqe=d.id;mqRender()};
 ACT.mqcx=function(){S.mqe=null;mqRender()};
-ACT.mqsv=function(d){var x=mqDoc(d.id);if(!x||!DB)return;var o=[0,1,2,3].map(function(i){return v("mq_o"+i)}),q=v("mq_q");
- if(!q||o.some(function(t){return!t})||new Set(o).size<4){alert("প্রশ্ন ও চারটি আলাদা অপশন দিন।");return}
- S.mqe=null;mqPut(x,{q:[q,o,+$("mq_a").value,v("mq_e")],src:v("mq_s")})};
+ACT.mqsv=function(d){var x=mqDoc(d.id);if(!x||!DB)return;var q=v("mq_q");if(!q){alert("প্রশ্ন লিখুন।");return}var r=QE.read("mq",x.q,0);if(!r)return;
+ S.mqe=null;mqPut(x,{q:QE.apply(x.q,r,q,0),src:v("mq_s")})};
 ACT.mqhd=function(d){var x=mqDoc(d.id);if(!x||!DB)return;mqPut(x,{hide:!x.hide})};
 ACT.mqdl=function(d){ask("এই প্রশ্ন স্থায়ীভাবে মুছে ফেলবেন? (ফেরত আসবে না)",async function(){await del("questions",d.id);SH.questions=SH.questions.filter(function(x){return x.id!=d.id});mqRender()})};
 })();
@@ -2535,7 +2553,7 @@ function items(){var s=S.pqs||"",c=S.pqc||"",t=(S.pqt||"").toLowerCase(),r=[];
   x.pk.forEach(function(q,i){if(!q||!q[0])return;if(t&&String(q[0]).toLowerCase().indexOf(t)<0)return;r.push({x:x,i:i,q:q})})});return r}
 function chs(){var s=S.pqs||"",m={};(SH.questions||[]).forEach(function(x){if(x&&x.pk&&(!s||x.s==s)&&x.ch)m[x.ch]=(m[x.ch]||0)+x.pk.length});return Object.keys(m).sort().map(function(k){return[k,m[k]]})}
 function one(it){var q=it.q,k=it.x.id+"#"+it.i,o=q[1]||[];
- if(S.pqe==k){return'<div class="card" style="margin:8px 0"><label>প্রশ্ন</label><textarea id="pq_q" rows="3">'+esc(q[0])+'</textarea>'+[0,1,2,3].map(function(i){return'<label>অপশন '+bn(i+1)+'</label><input id="pq_o'+i+'" value="'+esc(o[i]||"")+'">'}).join("")+'<label>সঠিক উত্তর</label><select id="pq_a">'+[0,1,2,3].map(function(i){return'<option value="'+i+'"'+(i==q[2]?" selected":"")+'>অপশন '+bn(i+1)+'</option>'}).join("")+'</select><label>ব্যাখ্যা</label><textarea id="pq_e" rows="2">'+esc(q[3]||"")+'</textarea><div class="row" style="margin-top:8px"><button class="primary" data-a="pqsv" data-k="'+k+'">সংরক্ষণ</button><button data-a="pqcx">বাতিল</button></div></div>'}
+ if(S.pqe==k){return'<div class="card" style="margin:8px 0"><label>প্রশ্ন</label><textarea id="pq_q" rows="3">'+esc(q[0])+'</textarea>'+QE.form('pq',q,1)+'<div class="row" style="margin-top:8px"><button class="primary" data-a="pqsv" data-k="'+k+'">সংরক্ষণ</button><button data-a="pqcx">বাতিল</button></div></div>'}
  var os=o.map(function(t,i){return(i==q[2]?"✅ ":"▫️ ")+esc(t)}).join(" · ");
  return'<div class="card" style="margin:8px 0"><b>'+esc(q[0])+'</b><br><small style="color:var(--mute)">'+os+'</small><br><small style="color:var(--mute)">'+esc((window.F&&F[it.x.s]||{}).n||it.x.s)+' · '+esc(it.x.ch||"")+'</small><div class="row" style="margin-top:6px"><button class="link" data-a="pqed" data-k="'+k+'">সম্পাদনা</button></div></div>'}
 function rend(){var h=$("pqx");if(!h)return;var r=items(),pg=S.pqp||0,sl=r.slice(pg*N,pg*N+N);
@@ -2552,11 +2570,10 @@ ACT.pqpg=function(d){S.pqp=Math.max(0,(S.pqp||0)+(+d.d));S.pqe=null;rend()};
 ACT.pqed=function(d){S.pqe=d.k;rend()};
 ACT.pqcx=function(){S.pqe=null;rend()};
 ACT.pqsv=async function(d){if(!ADMIN()||!DB)return;var f=find(d.k);if(!f)return;
- var q=v("pq_q"),o=[0,1,2,3].map(function(i){return v("pq_o"+i)});
- if(!q||o.some(function(t){return!t})){alert("প্রশ্ন ও চারটি অপশনই লিখতে হবে।");return}
+ var q=v("pq_q");if(!q){alert("প্রশ্ন লিখুন।");return}var rd=QE.read("pq",null,1);if(!rd)return;
  var x=f.x,old=x.pk[f.i],pk=x.pk;
  try{var ref=DB.collection("questions").doc(x.id);if(ref.get){var sn=await ref.get();if(sn&&sn.exists&&sn.data().pk){pk=sn.data().pk;if(!pk[f.i]||pk[f.i][0]!=old[0]){alert("এই প্রশ্নটি অন্য জায়গা থেকে বদলে গেছে। পাতা নতুন করে খুলে আবার চেষ্টা করুন।");return}}}}catch(e){}
- var nq=pk[f.i].slice();nq[0]=q;nq[1]=o;nq[2]=+$("pq_a").value;nq[3]=v("pq_e");
+ var nq=QE.apply(pk[f.i],rd,q,1);
  var np=pk.slice();np[f.i]=nq;var doc={};for(var k in x)if(k!="id")doc[k]=x[k];doc.pk=np;
  try{await DB.collection("questions").doc(x.id).set(doc);x.pk=np;S.pqe=null;rend();alert("সংরক্ষণ হয়েছে।")}catch(e){alert("সংরক্ষণ করা যায়নি।")}};
 var a1=adm;adm=function(){a1();try{if(!ADMIN())return;var hs=[].slice.call(A.querySelectorAll(".card h2")),m=hs.filter(function(h){return h.textContent.indexOf("প্রশ্ন ব্যবস্থাপনা")>=0})[0],c=m&&m.parentNode;
@@ -2615,6 +2632,21 @@ async function sync(){try{
  XQ=all;try{ls("ec_xq",all);ls("ec_xqv",m.v)}catch(e){}
  refresh()}catch(e){}}
 sync();
+})();
+/* nb90: সাম্প্রতিক তথ্য (current affairs) প্রশ্ন সম্পাদনা — অ্যাডমিন; ২–৫ অপশন, তারিখ ও ব্যাখ্যাসহ */
+(function(){
+if(typeof curAdm!="function"||!window.QE)return;
+function key(d,i){return d+"#"+i}
+function list(){var L=[];(SH.cur||[]).forEach(function(d){(d.pk||[]).forEach(function(q,i){L.push({d:d.id,i:i,q:q})})});L.sort(function(a,b){return(b.q[4]||"")<(a.q[4]||"")?-1:1});return L}
+curAdm=function(){var L=list();
+ return'<div class="card"><h2>সাম্প্রতিক তথ্য ('+bn(L.length)+')</h2><p class="sub">চলতি ঘটনাবলির প্রশ্ন। ভুল দেখলে সম্পাদনা করুন বা মুছুন।</p>'+lst(L.slice(0,60),function(x){
+  if(S.cue==key(x.d,x.i)){var q=x.q;return'<div class="card" style="margin:8px 0"><label>প্রশ্ন</label><textarea id="cu_q" rows="3">'+esc(q[0])+'</textarea>'+QE.form("cu",q,0)+'<label>তারিখ (YYYY-MM-DD)</label><input id="cu_d" value="'+esc(q[4]||"")+'"><div class="row" style="margin-top:8px"><button class="primary" data-a="cus" data-id="'+x.d+'" data-i="'+x.i+'">সংরক্ষণ</button><button data-a="cuc">বাতিল</button></div></div>'}
+  return row(esc(x.q[0].slice(0,60)),esc(x.q[4]||"")+" · উত্তর: "+esc(x.q[1][x.q[2]]),'<button class="link" data-a="cue" data-id="'+x.d+'" data-i="'+x.i+'">সম্পাদনা</button> <button class="link" data-a="cd" data-id="'+x.d+'" data-i="'+x.i+'">মুছুন</button>')})+'</div>'};
+ACT.cue=function(d){S.cue=key(d.id,d.i);adm()};
+ACT.cuc=function(){S.cue=null;adm()};
+ACT.cus=async function(d){if(!ADMIN()||!DB)return;var q=v("cu_q");if(!q){alert("প্রশ্ন লিখুন।");return}var r=QE.read("cu",null,0);if(!r)return;
+ try{var ref=DB.doc("cur/"+d.id),sn=await ref.get(),pk=((sn.exists&&sn.data().pk)||[]).slice(),i=+d.i;if(!pk[i]){alert("প্রশ্নটি পাওয়া যায়নি।");return}
+  var nq=QE.apply(pk[i],r,q,0);while(nq.length<5)nq.push("");nq[4]=v("cu_d")||nq[4];pk[i]=nq;await ref.update({pk:pk});S.cue=null;alert("সংরক্ষণ হয়েছে।");adm()}catch(e){alert("সংরক্ষণ করা যায়নি।")}};
 })();
 /* nb89: ৫ম অপশন (ঙ) লেবেল — ম্যাট্রিক্স-ধাঁচের প্রশ্নের জন্য */
 (function(){try{if(typeof LB!="undefined"&&LB.length<5)LB[4]="ঙ"}catch(e){}})();
