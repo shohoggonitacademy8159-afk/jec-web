@@ -238,7 +238,7 @@ async function init(){
   try{DB.doc("cfg/main").onSnapshot(function(s){SH.cfg=s.data()||{}},function(){})}catch(e){}}
 
  if(!DB&&window.SNAP){for(var k in SNAP)SH[k]=SNAP[k];if(!ls("ec_user")&&!window.FBCFG0){}
-var APP_VER=window.APP_VER=18;
+var APP_VER=window.APP_VER=19;
 try{fetch("https://raw.githubusercontent.com/shohoggonitacademy8159-afk/jec-data/main/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!(+j.v>APP_VER)||!j.url)return;if(ls("ec_updskip")==j.v)return;var d=document.createElement("div");d.style.cssText="position:fixed;left:10px;right:10px;bottom:70px;z-index:99999;background:#1565d8;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:15px";d.innerHTML='<b>নতুন আপডেট এসেছে!</b><br><span style="font-size:13px">'+(j.note||"অ্যাপের নতুন সংস্করণ ডাউনলোড করুন।")+'</span><div style="margin-top:8px;display:flex;gap:8px"><a href="'+j.url+'" target="_blank" style="background:#fff;color:#1565d8;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none">আপডেট করুন</a><button id="updx" style="background:transparent;color:#fff;border:1px solid #fff;border-radius:10px;padding:8px 14px">পরে</button></div>';document.body.appendChild(d);document.getElementById("updx").onclick=function(){ls("ec_updskip",j.v);d.remove()}}).catch(function(){})}catch(e){}
 window.GENR=function(R){try{
 var cats=CT.map(function(c){return c[0]}),t0=new Date(Date.now()+216e5),mn=chaps("math").map(function(c){return c[0]}),bl=chaps("bl").map(function(c){return c[0]}),g1=chaps("gkbd").map(function(c){return c[0]}),g2=chaps("gkint").map(function(c){return c[0]}),en=chaps("eng").map(function(c){return c[0]});
@@ -2647,6 +2647,45 @@ ACT.cuc=function(){S.cue=null;adm()};
 ACT.cus=async function(d){if(!ADMIN()||!DB)return;var q=v("cu_q");if(!q){alert("প্রশ্ন লিখুন।");return}var r=QE.read("cu",null,0);if(!r)return;
  try{var ref=DB.doc("cur/"+d.id),sn=await ref.get(),pk=((sn.exists&&sn.data().pk)||[]).slice(),i=+d.i;if(!pk[i]){alert("প্রশ্নটি পাওয়া যায়নি।");return}
   var nq=QE.apply(pk[i],r,q,0);while(nq.length<5)nq.push("");nq[4]=v("cu_d")||nq[4];pk[i]=nq;await ref.update({pk:pk});S.cue=null;alert("সংরক্ষণ হয়েছে।");adm()}catch(e){alert("সংরক্ষণ করা যায়নি।")}};
+})();
+/* nb91: কোর্স তালিকা সারি-ভিত্তিক (নাম/মেয়াদ/সুবিধা/পরীক্ষা সংখ্যা/দাম/কিনুন); দাম অ্যাডমিন নিজে বসান; একটি পেইড কোর্স কিনলে সব কোর্স-বাটনের পরীক্ষা ফ্রি */
+(function(){
+if(typeof CR!="function"||typeof courses!="function"||!window.MC24)return;
+var MID="monthly24",MM=[1,3,6,12];
+MC24.feat=["প্রতি ৩০ দিনে ১৫টি পরীক্ষা (১ মাসে ১৫, ৩ মাসে ৪৫, ৬ মাসে ৯০, ১২ মাসে ১৮০টি)","প্রতিটি পরীক্ষা ২০ বা ৩০ নম্বরের; সব বিষয়ের মিশ্রণ, প্রতি মাসে নতুন সেট","সময়: ২০ নম্বরে ৮, ৩০ নম্বরে ১২ মিনিট; নেগেটিভ মার্কিং আছে","পরীক্ষা শেষে প্রতিটি প্রশ্নের সঠিক উত্তর ও ব্যাখ্যা দেখা যাবে","ফলাফল, ভুল প্রশ্নের তালিকা ও আর্কাইভ সংরক্ষিত থাকবে","একটি কোর্স কিনলেই অ্যাপের সব কোর্স/পেইড পরীক্ষার বাটন মেয়াদ পর্যন্ত ফ্রি","অনুমোদনের পর কোর্স চালু; মেয়াদ শেষে নবায়ন করতে হবে। পেমেন্ট: নগদ / বিকাশ / রকেট"];
+function ov(){return SH.courses.filter(function(x){return x.id==MID})[0]}
+function priced(){var o=ov();return!!(o&&o.plans&&o.plans.length)}
+var cr0=CR;
+CR=function(){var o=ov(),rest=SH.courses.filter(function(x){return x.id!=MID});
+ if(o&&o.plans&&o.plans.length){MC24.plans=o.plans;MC24.ol=o.ol||[];MC24.price=o.plans[0][1];MC24.days=o.plans[0][2]}
+ else{MC24.plans=null;MC24.ol=[];MC24.price=0}
+ return(priced()||ADMIN()?[MC24]:[]).concat(rest)};
+var e0=enr;
+enr=function(){var a=e0(),has=false;try{var all=CR();all.forEach(function(c){if((+c.price>0||(c.plans&&c.plans.length))&&a.indexOf(c.id)>=0)has=true});if(has)all.forEach(function(c){if(a.indexOf(c.id)<0)a.push(c.id)})}catch(e){}return a};
+function ex(c,p){var m=p?p[0]:0;if(c.auto)return m?c.auto*m:c.auto;var n=SH.tests.filter(function(t){return t.course==c.id}).length;return n}
+function exTxt(c,p){var n=ex(c,p);if(c.auto)return"📝 প্রতি মাসে "+bn(c.auto)+"টি পরীক্ষা"+(p?" · মোট "+bn(n)+"টি":"");return n?"📝 এখন "+bn(n)+"টি পরীক্ষা, নতুন যোগ হবে":"📝 পরীক্ষা শিগগিরই যোগ হবে"}
+function dur(p,c){return p?(p[0]==12?"১ বছর":bn(p[0])+" মাস"):(+c.days?bn(c.days)+" দিন":"সীমাহীন")}
+function nm(c,p,n){if(!p||!c.plans||c.plans.length<2)return esc(c.title);var m=p[0];return(m==12?"বার্ষিক প্যাকেজ":m==6?"ষাণ্মাসিক প্যাকেজ":m==3?"ত্রৈমাসিক প্যাকেজ":bn(m)+" মাসের প্যাকেজ")+" <small style=\"font-weight:500;color:var(--mute)\">· "+esc(c.title)+"</small>"+(m==12||m==6?' <span class="chip" style="background:#fff3cd;color:#8a5a00">Popular</span>':"")}
+function row(c,p,i,en,pend){var on=en.indexOf(c.id)>=0||ADMIN(),paid=+c.price>0||(c.plans&&c.plans.length),pr=p?p[1]:+c.price,old=c.ol&&c.ol[i]>pr?+c.ol[i]:0,b;
+ if(on)b='<button style="margin:0;width:100%" data-a="crs" data-id="'+esc(c.id)+'">✓ ভর্তি · খুলুন ›</button>';
+ else if(!paid)b='<button class="primary" style="margin:0;width:100%" data-a="en" data-id="'+esc(c.id)+'">ফ্রি ভর্তি</button>';
+ else if(pend)b='<button disabled style="margin:0;width:100%">যাচাই চলছে</button>';
+ else b='<button class="primary" style="margin:0;width:100%" data-a="bu" data-id="'+esc(c.id)+'"'+(p?' data-p="'+i+'"':"")+'>প্যাকেজ কিনুন</button>';
+ return'<div style="display:grid;grid-template-columns:1fr 130px;border:1px solid var(--line,#ccd);border-radius:12px;margin-bottom:10px;overflow:hidden;background:var(--card,#fff)"><div style="padding:12px;border-right:1px solid var(--line,#dde)"><b style="font-size:17px;display:block;margin-bottom:4px">'+nm(c,p,i)+'</b><div class="sub" style="margin:0 0 4px">মেয়াদ: '+dur(p,c)+'</div><div class="sub" style="margin:0 0 4px;font-size:14px">সব কোর্স-বাটনের পরীক্ষা ফ্রি'+(c.desc?" · "+esc(c.desc.slice(0,110)):"")+'</div><div class="sub" style="margin:0;font-size:14px;color:var(--ok,#1a7f4b)">'+exTxt(c,p)+'</div><button class="link" style="padding:6px 0 0" data-a="crs" data-id="'+esc(c.id)+'">সুবিধা বিস্তারিত ›</button></div><div style="padding:12px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:4px"><b style="font-size:22px">'+(paid?"৳"+bn(pr):"ফ্রি")+'</b>'+(old?'<s style="color:var(--mute);font-size:14px">৳'+bn(old)+'</s><b style="color:#1a7f4b;font-size:13px">সাশ্রয় '+bn(Math.round((old-pr)*100/old))+'%</b>':"")+b+'</div></div>'}
+function list(){var en=enr(),h="";CR().forEach(function(c){var pend=(S.myo||[]).some(function(o){return o.c==c.id&&o.st=="pending"});
+ if(c.plans&&c.plans.length)c.plans.forEach(function(p,i){h+=row(c,p,i,en,pend)});else h+=row(c,null,0,en,pend)});
+ if(!h)h='<div class="card"><p class="sub" style="margin:0">কোর্স শিগগিরই যোগ হবে।</p></div>';return h}
+var cs1=courses;
+courses=function(){cs1();try{if(!A||!A.querySelector("h1"))return;var g=A.querySelector(".g3");if(!g)return;
+ g.outerHTML='<div class="card" style="margin-bottom:12px"><h2 style="margin-top:0">✨ প্যাকেজের সুবিধা</h2><p class="sub" style="margin:0">• একটি কোর্স কিনলেই অ্যাপের সব কোর্স-বাটনের পরীক্ষা মেয়াদ পর্যন্ত ফ্রি<br>• প্রতিটি পরীক্ষায় উত্তর ও ব্যাখ্যা, ফলাফল, ভুল প্রশ্নের তালিকা ও আর্কাইভ<br>• পেমেন্ট নগদ / বিকাশ / রকেটে সেন্ড মানি; TrxID জমা দিলে অ্যাডমিন যাচাই করে চালু করবেন</p></div>'+list()}catch(e){}};
+ACT.crb=function(){courses()};
+/* admin: price entry */
+function pcard(){var o=ov(),pl=(o&&o.plans)||[],old=(o&&o.ol)||[];
+ var r=MM.map(function(m,k){var i=pl.findIndex(function(p){return p[0]==m}),p=i>=0?pl[i][1]:"",q=i>=0&&old[i]?old[i]:"";return'<div class="h" style="gap:8px"><b style="min-width:70px">'+(m==12?"১ বছর":bn(m)+" মাস")+'</b><input id="mp'+k+'" type="number" placeholder="দাম ৳" value="'+p+'" style="width:42%"><input id="mo'+k+'" type="number" placeholder="আগের দাম (ঐচ্ছিক)" value="'+q+'" style="width:42%"></div>'}).join("");
+ return'<div class="card"><h2>💰 কোর্সের মূল্য নির্ধারণ</h2><p class="sub">"'+esc(MC24.title)+'" কোর্সের প্রতিটি মেয়াদের দাম বসান। দাম ফাঁকা রাখলে ওই মেয়াদ দেখাবে না। কোনো মেয়াদেই দাম না দিলে কোর্সটি ব্যবহারকারীর কাছে লুকানো থাকবে। "আগের দাম" দিলে কাটা দাম ও সাশ্রয় শতাংশ দেখাবে।</p>'+r+'<button class="primary" data-a="pps">দাম সংরক্ষণ</button></div>'}
+var ad1=adm;adm=function(){ad1();try{if(!ADMIN())return;var h=A.querySelector("h1");if(h&&!$("mp0"))h.insertAdjacentHTML("afterend",pcard())}catch(e){}};ACT.am=adm;
+ACT.pps=async function(){if(!ADMIN()||!DB)return;var pl=[],ol=[];MM.forEach(function(m,k){var p=+v("mp"+k),q=+v("mo"+k);if(p>0){pl.push([m,p,m==12?365:m*30]);ol.push(q>p?q:0)}});
+ try{await DB.collection("courses").doc(MID).set({title:MC24.title,desc:"",price:pl.length?pl[0][1]:0,days:30,auto:15,qn:30,min:30,plans:pl,ol:ol,at:Date.now()});alert("দাম সংরক্ষণ হয়েছে।");adm()}catch(e){alert("সংরক্ষণ করা যায়নি।")}};
 })();
 /* nb89: ৫ম অপশন (ঙ) লেবেল — ম্যাট্রিক্স-ধাঁচের প্রশ্নের জন্য */
 (function(){try{if(typeof LB!="undefined"&&LB.length<5)LB[4]="ঙ"}catch(e){}})();
