@@ -238,7 +238,7 @@ async function init(){
   try{DB.doc("cfg/main").onSnapshot(function(s){SH.cfg=s.data()||{}},function(){})}catch(e){}}
 
  if(!DB&&window.SNAP){for(var k in SNAP)SH[k]=SNAP[k];if(!ls("ec_user")&&!window.FBCFG0){}
-var APP_VER=window.APP_VER=19;
+var APP_VER=window.APP_VER=20;
 try{fetch("https://raw.githubusercontent.com/shohoggonitacademy8159-afk/jec-data/main/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!(+j.v>APP_VER)||!j.url)return;if(ls("ec_updskip")==j.v)return;var d=document.createElement("div");d.style.cssText="position:fixed;left:10px;right:10px;bottom:70px;z-index:99999;background:#1565d8;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:15px";d.innerHTML='<b>নতুন আপডেট এসেছে!</b><br><span style="font-size:13px">'+(j.note||"অ্যাপের নতুন সংস্করণ ডাউনলোড করুন।")+'</span><div style="margin-top:8px;display:flex;gap:8px"><a href="'+j.url+'" target="_blank" style="background:#fff;color:#1565d8;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none">আপডেট করুন</a><button id="updx" style="background:transparent;color:#fff;border:1px solid #fff;border-radius:10px;padding:8px 14px">পরে</button></div>';document.body.appendChild(d);document.getElementById("updx").onclick=function(){ls("ec_updskip",j.v);d.remove()}}).catch(function(){})}catch(e){}
 window.GENR=function(R){try{
 var cats=CT.map(function(c){return c[0]}),t0=new Date(Date.now()+216e5),mn=chaps("math").map(function(c){return c[0]}),bl=chaps("bl").map(function(c){return c[0]}),g1=chaps("gkbd").map(function(c){return c[0]}),g2=chaps("gkint").map(function(c){return c[0]}),en=chaps("eng").map(function(c){return c[0]});
@@ -280,7 +280,7 @@ function tcard(t,en){var n=Date.now(),lock=t.course&&en.indexOf(t.course)<0&&!AD
  if(t.start&&n<t.start){m="শুরু: "+when(t.start);ok=false}else if(t.end&&n>t.end){m="শেষ হয়েছে";ok=false}else if(ls("ec_live_t_"+t.id)){m="দেওয়া হয়েছে";ok=false}else if(lock){m="কোর্সে ভর্তি হলে পাবেন";ok=false}
  return row('<b>'+esc(t.title)+'</b>',bn(t.qs.length)+'টি প্রশ্ন · '+(t.min?bn(t.min)+' মিনিট':'স্বয়ংক্রিয় সময়')+(t.free?" · ফ্রি":"")+(m?" · "+m:""),'<button class="link" data-a="st" data-id="'+t.id+'"'+(ok?"":" disabled")+'>শুরু</button>')}
 function tests(){S.cur=tests;shell(1);var w=weekly(),wm=CF().weeklyMin||20,dn=ls("ec_live_w"+w.w),en=enr();
- A.innerHTML='<h1>পরীক্ষা কেন্দ্র</h1><div class="card"><h2>সাপ্তাহিক ফ্রি মডেল টেস্ট</h2><p class="sub">প্রতি সপ্তাহে নতুন সেট, সবার জন্য ফ্রি। '+bn(w.p.length)+'টি প্রশ্ন, সময় ২০ নম্বরে ৮, ৩০-এ ১২, ১০০-এ ৫০, ২০০-এ ৯০ মিনিট; শুধু গণিত হলে প্রশ্নের সমান।</p><button class="primary" style="margin:0" data-a="wk"'+(dn?" disabled":"")+'>'+(dn?"এই সপ্তাহের পরীক্ষা দেওয়া হয়েছে":"ফ্রি মডেল টেস্ট শুরু করুন")+'</button></div>'+(ADMIN()?'<div class="card"><h2>মিশ্র পরীক্ষা আয়োজন</h2><p class="sub">টপিক বেছে মিশ্র পরীক্ষা প্রকাশ করুন।</p><button class="primary" style="margin:0" data-a="mx">মিশ্র পরীক্ষা আয়োজন করুন</button></div>':"")+'<div class="card"><h2>লাইভ পরীক্ষা</h2><p class="sub">দিনের যেকোনো সময় দিতে পারবেন; আজকের সেট সবার জন্য একই।</p><button class="primary" style="margin:0" data-a="lv">লাইভ পরীক্ষায় যান</button></div><div class="card"><h2>মডেল টেস্ট</h2>'+lst(SH.tests,function(t){return tcard(t,en)})+'</div>'+jmCard()}
+ A.innerHTML='<h1>পরীক্ষা কেন্দ্র</h1><div class="card"><h2>সাপ্তাহিক মডেল টেস্ট</h2><p class="sub">প্রতি সপ্তাহে নতুন সেট, সবার জন্য ফ্রি। '+bn(w.p.length)+'টি প্রশ্ন, সময় ২০ নম্বরে ৮, ৩০-এ ১২, ১০০-এ ৫০, ২০০-এ ৯০ মিনিট; শুধু গণিত হলে প্রশ্নের সমান।</p><button class="primary" style="margin:0" data-a="wk"'+(dn?" disabled":"")+'>'+(dn?"এই সপ্তাহের পরীক্ষা দেওয়া হয়েছে":"ফ্রি মডেল টেস্ট শুরু করুন")+'</button></div>'+(ADMIN()?'<div class="card"><h2>মিশ্র পরীক্ষা আয়োজন</h2><p class="sub">টপিক বেছে মিশ্র পরীক্ষা প্রকাশ করুন।</p><button class="primary" style="margin:0" data-a="mx">মিশ্র পরীক্ষা আয়োজন করুন</button></div>':"")+'<div class="card"><h2>লাইভ পরীক্ষা</h2><p class="sub">দিনের যেকোনো সময় দিতে পারবেন; আজকের সেট সবার জন্য একই।</p><button class="primary" style="margin:0" data-a="lv">লাইভ পরীক্ষায় যান</button></div><div class="card"><h2>মডেল টেস্ট</h2>'+lst(SH.tests,function(t){return tcard(t,en)})+'</div>'+jmCard()}
 function courses(){S.cur=courses;shell(1);var en=enr();
  A.innerHTML='<h1>কোর্স</h1>'+lst(SH.courses,function(c){var on=en.indexOf(c.id)>=0,ts=SH.tests.filter(function(t){return t.course==c.id});
   return'<div class="card"><h2>'+esc(c.title)+'</h2><p class="sub" style="margin-bottom:8px">'+esc(c.desc||"")+'</p>'+(on?(ts.length?ts.map(function(t){return tcard(t,en)}).join(""):'<p class="sub" style="margin:0">টেস্ট শিগগিরই যোগ হবে।</p>'):'<button class="primary" style="margin:0" data-a="en" data-id="'+c.id+'">ফ্রি ভর্তি হোন ('+bn(ts.length)+'টি টেস্ট)</button>')+'</div>'})}
@@ -304,7 +304,7 @@ function adm(){S.cur=adm;shell(1);if(!ADMIN()){home();return}var c=CF(),cs=SH.co
  $("c1").value=c.open===false?"0":"1";$("c3").value=c.weeklyMin||20;$("c5").value=LVM();$("c6").value=c.nagad||"";$("c7").value=c.bkash||"";$("c8").value=c.rocket||"";if(c.closeAt)$("c2").value=new Date(c.closeAt-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
 }
 ACT.am=adm;ACT.lv=function(){live()};ACT.pr=propose;
-ACT.wk=function(){var w=weekly();begin(w.p,20,"সাপ্তাহিক ফ্রি মডেল টেস্ট",0.25,(CF().weeklyMin||20)*60,"w"+w.w)};
+ACT.wk=function(){var w=weekly();begin(w.p,20,"সাপ্তাহিক মডেল টেস্ট",0.25,(CF().weeklyMin||20)*60,"w"+w.w)};
 ACT.st=function(d){var t=SH.tests.filter(function(x){return x.id==d.id})[0];if(!t)return;var s=t.min>0?t.min*60:autoSecs(t.qs);S.fixedNext=true;if(t.end)s=Math.min(s,Math.floor((t.end-Date.now())/1e3));begin(t.qs.slice(),t.marks||t.qs.length,t.title,t.neg||0,s,"t_"+t.id)};
 ACT.en=function(d){var e=ls("ec_enr")||[];e.push(d.id);ls("ec_enr",e);courses()};
 ACT.dl=async function(d){if(!confirm("মুছে ফেলবেন?"))return;await del(d.c,d.id);rf()};
@@ -2219,7 +2219,7 @@ document.head.insertAdjacentHTML("beforeend",'<style id="nb67">:root{--mute:#3a4
 (function(){
 function fu(){return+((SH.free||{}).until||0)}
 function freeOn(){return fu()>Date.now()}
-function trialD(){var t=(SH.free||{}).trial;return t==null?7:+t}
+function trialD(){var t=(SH.free||{}).trial;return t==null?0:+t}
 function myFirst(){var a=+S.vfirst||0,b=+ls("ec_first")||0;return a&&b?Math.min(a,b):(a||b)}
 function trialUntil(){var f=myFirst();return f&&trialD()>0?f+trialD()*864e5:0}
 function trialOn(){return !ADMIN()&&trialUntil()>Date.now()}
@@ -2229,11 +2229,11 @@ enr=function(){var a=en0();if(!(freeOn()||trialOn()))return a;try{CR().forEach(f
 var sub=setInterval(function(){if(!DB||!ME)return;clearInterval(sub);try{DB.doc("visitors/"+ME).onSnapshot(function(s){var d=s.data()||{};S.vfirst=d.first||0},function(){})}catch(e){}try{DB.doc("cfg/free").onSnapshot(function(s){SH.free=s.data()||{};if(S.cur&&!S.inExam)try{var c=S.cur;if(c===home||c===courses||c===tests||c===adm)c()}catch(e){}},function(){})}catch(e){}},400);
 setTimeout(function(){clearInterval(sub)},20000);
 function ban(){return'<div class="ban" style="margin-bottom:14px">🎉 <b>সব কোর্স ও পরীক্ষা এখন সবার জন্য ফ্রি!</b><br><small>অফার চলবে '+when(fu())+' পর্যন্ত। এরপর পেইড কোর্স আগের মতো চালু হবে।</small></div>'}
-function tban(){return'<div class="ban" style="margin-bottom:14px">🎁 <b>আপনার ফ্রি ট্রায়াল চলছে!</b> সব কোর্স ও পরীক্ষা খোলা।<br><small>ট্রায়াল শেষ হবে '+when(trialUntil())+'। এরপর সাপ্তাহিক ফ্রি মডেল টেস্ট ছাড়া বাকিগুলো কোর্স কিনে দিতে হবে।</small></div>'}
+function tban(){return'<div class="ban" style="margin-bottom:14px">🎁 <b>আপনার ফ্রি ট্রায়াল চলছে!</b> সব কোর্স ও পরীক্ষা খোলা।<br><small>ট্রায়াল শেষ হবে '+when(trialUntil())+'। এরপর পরীক্ষাগুলো কোর্স কিনে দিতে হবে।</small></div>'}
 function wrap(n){var f0=window[n];if(typeof f0!="function")return;window[n]=function(){if(!ls("ec_first"))ls("ec_first",Date.now());var r=f0.apply(this,arguments);try{var b=freeOn()?ban():trialOn()?tban():"";if(b&&A.querySelector("h1")&&!A.querySelector("[data-fb]"))(function(){var h1=A.querySelector("h1"),hd=h1.closest&&h1.closest(".hhead");(hd||h1).insertAdjacentHTML("afterend",b.replace('class="ban"','data-fb="1" class="ban" style="margin:14px 16px 10px"').replace('style="margin-bottom:14px"',""))})()}catch(e){}return r}}
 wrap("home");wrap("courses");wrap("tests");
 function admCard(){var on=freeOn();
- return'<div class="card"><h2>🎁 সবার জন্য ফ্রি অফার</h2><p class="sub">'+(on?'<b style="color:var(--ok)">চালু আছে</b>, শেষ হবে: '+when(fu())+'। এরপর পেইড কোর্স নিজে থেকেই আগের মতো চালু হবে।':(fu()?'আগের অফার শেষ হয়েছে ('+when(fu())+')। পেইড কোর্স এখন চালু।':'এখন বন্ধ। পেইড কোর্স চালু আছে।'))+'</p><div class="row"><button class="primary" style="margin:0" data-a="fr1">আজ থেকে ১ মাস ফ্রি করুন</button></div>'+fld("frd","অথবা নিজে শেষের তারিখ ও সময় দিন","datetime-local")+'<div class="row" style="margin-top:8px"><button data-a="fr2">এই সময় পর্যন্ত ফ্রি</button><button data-a="fr0">এখনই ফ্রি বন্ধ</button></div></div><div class="card"><h2>🆕 নতুন ব্যবহারকারীর ফ্রি ট্রায়াল</h2><p class="sub">নিবন্ধনের (প্রথম প্রবেশের) পর এত দিন সব কোর্স ও পরীক্ষা ফ্রি। সাপ্তাহিক ফ্রি মডেল টেস্ট সবসময় ফ্রি। বর্তমান: '+(trialD()>0?bn(trialD())+' দিন':'বন্ধ')+'</p>'+fld("trd","ট্রায়ালের দিন (০ = বন্ধ)","number")+'<button class="primary" data-a="fr3">সেভ করুন</button></div>'}
+ return'<div class="card"><h2>🎁 সবার জন্য ফ্রি অফার</h2><p class="sub">'+(on?'<b style="color:var(--ok)">চালু আছে</b>, শেষ হবে: '+when(fu())+'। এরপর পেইড কোর্স নিজে থেকেই আগের মতো চালু হবে।':(fu()?'আগের অফার শেষ হয়েছে ('+when(fu())+')। পেইড কোর্স এখন চালু।':'এখন বন্ধ। পেইড কোর্স চালু আছে।'))+'</p><div class="row"><button class="primary" style="margin:0" data-a="fr1">আজ থেকে ১ মাস ফ্রি করুন</button></div>'+fld("frd","অথবা নিজে শেষের তারিখ ও সময় দিন","datetime-local")+'<div class="row" style="margin-top:8px"><button data-a="fr2">এই সময় পর্যন্ত ফ্রি</button><button data-a="fr0">এখনই ফ্রি বন্ধ</button></div></div><div class="card"><h2>🆕 নতুন ব্যবহারকারীর ফ্রি ট্রায়াল</h2><p class="sub">নিবন্ধনের (প্রথম প্রবেশের) পর এত দিন সব কোর্স ও পরীক্ষা ফ্রি। সাপ্তাহিক মডেল টেস্ট সবসময় ফ্রি। বর্তমান: '+(trialD()>0?bn(trialD())+' দিন':'বন্ধ')+'</p>'+fld("trd","ট্রায়ালের দিন (০ = বন্ধ)","number")+'<button class="primary" data-a="fr3">সেভ করুন</button></div>'}
 var adm1=adm;adm=function(){adm1();if(!ADMIN())return;var h=A.querySelector("h1");if(h)h.insertAdjacentHTML("afterend",admCard());if($("trd"))$("trd").value=trialD();if(fu()&&$("frd"))$("frd").value=new Date(fu()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16)};
 async function setU(u){if(!DB){alert("ডেটাবেস সংযুক্ত নেই।");return}try{await DB.doc("cfg/free").set({until:u,trial:trialD(),at:Date.now()});SH.free={until:u,trial:trialD()};adm()}catch(e){alert("সেভ করা যায়নি।")}}
 ACT.fr1=function(){var d=new Date();d.setMonth(d.getMonth()+1);ask("আজ থেকে ১ মাস ("+when(d.getTime())+" পর্যন্ত) সব কোর্স ফ্রি করবেন?",function(){setU(d.getTime())})};
@@ -2686,6 +2686,27 @@ function pcard(){var o=ov(),pl=(o&&o.plans)||[],old=(o&&o.ol)||[];
 var ad1=adm;adm=function(){ad1();try{if(!ADMIN())return;var h=A.querySelector("h1");if(h&&!$("mp0"))h.insertAdjacentHTML("afterend",pcard())}catch(e){}};ACT.am=adm;
 ACT.pps=async function(){if(!ADMIN()||!DB)return;var pl=[],ol=[];MM.forEach(function(m,k){var p=+v("mp"+k),q=+v("mo"+k);if(p>0){pl.push([m,p,m==12?365:m*30]);ol.push(q>p?q:0)}});
  try{await DB.collection("courses").doc(MID).set({title:MC24.title,desc:"",price:pl.length?pl[0][1]:0,days:30,auto:15,qn:30,min:30,plans:pl,ol:ol,at:Date.now()});alert("দাম সংরক্ষণ হয়েছে।");adm()}catch(e){alert("সংরক্ষণ করা যায়নি।")}};
+})();
+/* nb92: কোর্স কেনা ছাড়া কোনো পরীক্ষা শুরু করা যাবে না; "আপনার কোর্স চালু নেই" + প্যাকেজ কিনুন; পেমেন্ট পেজে প্রক্রিয়া */
+(function(){
+if(typeof begin!="function"||typeof enr!="function"||typeof CR!="function")return;
+function isPaid(c){return+c.price>0||(c.plans&&c.plans.length>0)}
+function hasPaid(){var en=enr();return CR().some(function(c){return isPaid(c)&&en.indexOf(c.id)>=0})}
+function freeCourseOk(key){if(!key||String(key).indexOf("t_")!=0)return false;var id=String(key).slice(2),t=SH.tests.filter(function(x){return x.id==id})[0];if(!t||!t.course)return false;var c=CR().filter(function(x){return x.id==t.course})[0];return!!c&&!isPaid(c)&&enr().indexOf(c.id)>=0}
+function dlg(){var o=document.getElementById("nocr");if(o)o.remove();o=document.createElement("div");o.id="nocr";o.style.cssText="position:fixed;inset:0;z-index:99998;background:rgba(10,15,30,.55);display:flex;align-items:center;justify-content:center;padding:20px";
+ o.innerHTML='<div style="background:var(--card,#fff);color:var(--ink,#111);border-radius:16px;padding:22px;max-width:360px;width:100%;text-align:center"><div style="font-size:42px">🔒</div><h2 style="margin:6px 0">আপনার কোর্স চালু নেই</h2><p class="sub" style="margin:0 0 14px">পরীক্ষা দিতে একটি কোর্স প্যাকেজ কিনুন। একটি কোর্স কিনলেই সব কোর্স-বাটনের পরীক্ষা মেয়াদ পর্যন্ত ফ্রি।</p><button class="primary" id="nocb" style="margin:0 0 8px;width:100%">প্যাকেজ কিনুন</button><button id="nocx" style="width:100%">বন্ধ করুন</button></div>';
+ document.body.appendChild(o);document.getElementById("nocx").onclick=function(){o.remove()};document.getElementById("nocb").onclick=function(){o.remove();S.inExam=0;courses()}}
+var b0=begin;
+begin=function(p,m,l,neg,secs,live){var t=String(l||"");
+ if(!ADMIN()&&t.indexOf("সাম্প্রতিক তথ্য")!=0&&t.indexOf("জব সলিউশন")!=0&&!hasPaid()&&!freeCourseOk(live)){dlg();return}
+ return b0.apply(this,arguments)};
+/* exam tab: notice for users without course */
+function banner(){return'<div class="card" style="border-color:#d9730d" data-nc="1"><div class="h"><span><b>আপনার কোর্স চালু নেই</b><br><small style="color:var(--mute)">পরীক্ষা দিতে কোর্স প্যাকেজ কিনুন</small></span><button class="primary" style="margin:0;width:auto;padding:8px 14px" data-a="go" data-f="courses">প্যাকেজ কিনুন</button></div></div>'}
+var t0=tests;tests=function(){t0();try{if(ADMIN()||hasPaid()||!A||A.querySelector("[data-nc]"))return;var h=A.querySelector("h1");if(h)h.insertAdjacentHTML("afterend",banner())}catch(e){}};
+/* payment page: steps */
+var p0=pay;pay=function(id,p){p0(id,p);try{if(!A||A.querySelector("[data-pst]"))return;var h=A.querySelector("h1");if(!h)return;
+ h.insertAdjacentHTML("afterend",'<div class="card" data-pst="1"><h2 style="margin-top:0">পেমেন্টের প্রক্রিয়া</h2><p class="sub" style="margin:0">১। নিচে দেখানো নগদ / বিকাশ / রকেটের যেকোনো একটি নম্বরে কোর্সের পুরো টাকা <b>সেন্ড মানি</b> করুন।<br>২। নিচের ফর্মে মাধ্যম, যে নম্বর থেকে পাঠিয়েছেন, ট্রানজেকশন আইডি (TrxID) ও টাকার অঙ্ক লিখুন।<br>৩। <b>পেমেন্ট জমা দিন</b> চাপুন।<br>৪। অ্যাডমিন TrxID মিলিয়ে অনুমোদন দিলে কোর্স চালু হবে এবং সব পরীক্ষা খুলবে। স্বয়ংক্রিয় যাচাই নেই, তাই কিছু সময় লাগতে পারে।</p></div>')}catch(e){}};
+ACT.bu=function(d){pay(d.id,d.p)};ACT.pkb=function(d){var a=$("agr");if(a&&!a.checked){toast("শর্তাবলিতে সম্মত হতে টিক দিন।");return}pay(d.id,d.p)};
 })();
 /* nb89: ৫ম অপশন (ঙ) লেবেল — ম্যাট্রিক্স-ধাঁচের প্রশ্নের জন্য */
 (function(){try{if(typeof LB!="undefined"&&LB.length<5)LB[4]="ঙ"}catch(e){}})();
