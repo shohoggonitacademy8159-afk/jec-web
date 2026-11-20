@@ -238,7 +238,7 @@ async function init(){
   try{DB.doc("cfg/main").onSnapshot(function(s){SH.cfg=s.data()||{}},function(){})}catch(e){}}
 
  if(!DB&&window.SNAP){for(var k in SNAP)SH[k]=SNAP[k];if(!ls("ec_user")&&!window.FBCFG0){}
-var APP_VER=window.APP_VER=17;
+var APP_VER=window.APP_VER=18;
 try{fetch("https://raw.githubusercontent.com/shohoggonitacademy8159-afk/jec-data/main/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!(+j.v>APP_VER)||!j.url)return;if(ls("ec_updskip")==j.v)return;var d=document.createElement("div");d.style.cssText="position:fixed;left:10px;right:10px;bottom:70px;z-index:99999;background:#1565d8;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:15px";d.innerHTML='<b>নতুন আপডেট এসেছে!</b><br><span style="font-size:13px">'+(j.note||"অ্যাপের নতুন সংস্করণ ডাউনলোড করুন।")+'</span><div style="margin-top:8px;display:flex;gap:8px"><a href="'+j.url+'" target="_blank" style="background:#fff;color:#1565d8;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none">আপডেট করুন</a><button id="updx" style="background:transparent;color:#fff;border:1px solid #fff;border-radius:10px;padding:8px 14px">পরে</button></div>';document.body.appendChild(d);document.getElementById("updx").onclick=function(){ls("ec_updskip",j.v);d.remove()}}).catch(function(){})}catch(e){}
 window.GENR=function(R){try{
 var cats=CT.map(function(c){return c[0]}),t0=new Date(Date.now()+216e5),mn=chaps("math").map(function(c){return c[0]}),bl=chaps("bl").map(function(c){return c[0]}),g1=chaps("gkbd").map(function(c){return c[0]}),g2=chaps("gkint").map(function(c){return c[0]}),en=chaps("eng").map(function(c){return c[0]});
@@ -2267,7 +2267,7 @@ ACT.rc=function(){var k=(v("acd")||"").toUpperCase().replace(/\s/g,""),d=dev(),o
  if(!ok){$("er2").textContent="কোডটি সঠিক নয়। ডিভাইস আইডি ও কোড মিলিয়ে নিন।";return}
  var a=ls("ec_act")||[],ex=a.filter(function(x){return x.c==ok.c})[0],base=ex&&ex.exp>Date.now()?ex.exp:Date.now();a=a.filter(function(x){return x.c!=ok.c});a.push({c:ok.c,exp:base+ok.days*864e5,k:k});ls("ec_act",a);alert("সফল! "+ok.t+" চালু হয়েছে।");courses()};
 /* redeem entry on courses page + admin generator */
-var cs0=courses;courses=function(){cs0();if(DB||!A)return;var h=A.querySelector("h1");if(h)h.insertAdjacentHTML("afterend",codeCard())};
+var cs0=courses;courses=function(){cs0();if(DB||!A||window.FBON)return;var h=A.querySelector("h1");if(h)h.insertAdjacentHTML("afterend",codeCard())};
 var ad0=adm;adm=function(){ad0();if(!ADMIN())return;var h=A.querySelector("h1");if(!h)return;h.insertAdjacentHTML("afterend",'<div class="card"><h2>🔑 অ্যাক্টিভেশন কোড জেনারেটর (APK)</h2>'+fld("gdv","ইউজারের ডিভাইস আইডি")+'<label for="gcs">কোর্স</label><select id="gcs">'+CR().map(function(c){return'<option value="'+c.id+'">'+esc(c.title)+'</option>'}).join("")+'</select><label for="gpl">প্ল্যান নং</label><select id="gpl"><option value="0">১ (১ মাস)</option><option value="1">২ (৩ মাস)</option><option value="2">৩ (৬ মাস)</option><option value="3">৪ (১২ মাস)</option></select><button class="primary" data-a="gcd">কোড তৈরি</button><p id="gout" style="font-size:22px;font-weight:800;text-align:center;margin-top:10px"></p></div>')};
 ACT.gcd=function(){var d=v("gdv").trim();if(d.length<4){toast("ডিভাইস আইডি লিখুন");return}$("gout").textContent=mk(d,v("gcs"),+v("gpl"))};
 })();
