@@ -119,7 +119,7 @@ var J={bank:["ব্যাংক চাকরি",["math","eng","gkbd","gkint","
 var TYPES={d:["দৈনিক",[10,20]],w:["সাপ্তাহিক",[20,50]],m:["মাসিক",[50,100]]};
 var TIPS=["কঠিন প্রশ্নে এক মিনিটের বেশি আটকে থাকবেন না, পরে ফিরে আসুন।","দুটি ভুল অপশন বাদ দিলে সঠিক উত্তরের সম্ভাবনা ২৫% থেকে ৫০% হয়।","ভুল প্রশ্নগুলো একই দিনে আবার দেখুন, নিয়মিত রিভিশন মুখস্থের চেয়ে বেশি কাজ করে।","নেগেটিভ মার্কিং থাকলে অনুমানে উত্তর না দিয়ে নিশ্চিত প্রশ্ন আগে করুন।"];
 var mem={},S={},LB=["ক","খ","গ","ঘ"],A=document.getElementById("app");
-function ls(k,v){try{if(v===undefined){var r=localStorage.getItem(k);return r?JSON.parse(r):(mem[k]||null)}localStorage.setItem(k,JSON.stringify(v))}catch(e){if(v===undefined)return mem[k]||null;mem[k]=v}}
+var HM={};function ls(k,v){try{if(v===undefined){var r=localStorage.getItem(k);if(r&&r.length>20000&&r.charAt(0)=="["){var h=HM[k];if(h&&h.r===r)return h.v.slice();var pv=JSON.parse(r);HM[k]={r:r,v:pv};return pv.slice()}return r?JSON.parse(r):(mem[k]||null)}localStorage.setItem(k,JSON.stringify(v))}catch(e){if(v===undefined)return mem[k]||null;mem[k]=v}}
 function bn(s){return String(s).replace(/\d/g,function(d){return"০১২৩৪৫৬৭৮৯"[d]})}
 function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
 function $(i){return document.getElementById(i)}
@@ -238,7 +238,7 @@ async function init(){
   try{DB.doc("cfg/main").onSnapshot(function(s){SH.cfg=s.data()||{}},function(){})}catch(e){}}
 
  if(!DB&&window.SNAP){for(var k in SNAP)SH[k]=SNAP[k];if(!ls("ec_user")&&!window.FBCFG0){}
-var APP_VER=window.APP_VER=21;
+var APP_VER=window.APP_VER=22;
 try{fetch("https://raw.githubusercontent.com/shohoggonitacademy8159-afk/jec-data/main/version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){if(!j||!(+j.v>APP_VER)||!j.url)return;if(ls("ec_updskip")==j.v)return;var d=document.createElement("div");d.style.cssText="position:fixed;left:10px;right:10px;bottom:70px;z-index:99999;background:#1565d8;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:15px";d.innerHTML='<b>নতুন আপডেট এসেছে!</b><br><span style="font-size:13px">'+(j.note||"অ্যাপের নতুন সংস্করণ ডাউনলোড করুন।")+'</span><div style="margin-top:8px;display:flex;gap:8px"><a href="'+j.url+'" target="_blank" style="background:#fff;color:#1565d8;padding:8px 14px;border-radius:10px;font-weight:700;text-decoration:none">আপডেট করুন</a><button id="updx" style="background:transparent;color:#fff;border:1px solid #fff;border-radius:10px;padding:8px 14px">পরে</button></div>';document.body.appendChild(d);document.getElementById("updx").onclick=function(){ls("ec_updskip",j.v);d.remove()}}).catch(function(){})}catch(e){}
 window.GENR=function(R){try{
 var cats=CT.map(function(c){return c[0]}),t0=new Date(Date.now()+216e5),mn=chaps("math").map(function(c){return c[0]}),bl=chaps("bl").map(function(c){return c[0]}),g1=chaps("gkbd").map(function(c){return c[0]}),g2=chaps("gkint").map(function(c){return c[0]}),en=chaps("eng").map(function(c){return c[0]});
@@ -2632,7 +2632,7 @@ async function sync(){try{
  var r=await fetch(B+"manifest.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;var m=await r.json();
  if(!m||!m.files)return;var FL=m.files.concat(+(window.APP_VER||0)>=15?(m.files5||[]):[]);var cv=null;try{cv=ls("ec_xqv")}catch(e){}
  if(cv===m.v&&XQ.length)return;
- var all=[];for(var i=0;i<FL.length;i++){var f=await fetch(B+FL[i]+"?t="+Date.now(),{cache:"no-store"});if(!f.ok)return;var j=await f.json();(j.docs||[]).forEach(function(x){all.push(x)})}
+ var all=[],rs=await Promise.all(FL.map(function(n){return fetch(B+n+"?t="+Date.now(),{cache:"no-store"}).then(function(f){return f.ok?f.json():null})}));for(var i=0;i<rs.length;i++){if(!rs[i])return;(rs[i].docs||[]).forEach(function(x){all.push(x)})}
  XQ=all;try{ls("ec_xq",all);ls("ec_xqv",m.v)}catch(e){}
  refresh()}catch(e){}}
 sync();
